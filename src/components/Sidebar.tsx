@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import styles from './Sidebar.module.css';
 
 export default function Sidebar() {
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const pathname = usePathname();
+
   return (
     <nav className={`${styles.sidebar} glass-panel`}>
       <div className={styles.logo}>
@@ -13,29 +15,25 @@ export default function Sidebar() {
       </div>
       
       <ul className={styles.navList}>
-        <li 
-          className={`${styles.navItem} ${activeTab === 'dashboard' ? styles.active : ''}`}
-          onClick={() => setActiveTab('dashboard')}
-        >
-          <span className={styles.icon}>🎯</span> Dashboard
+        <li className={`${styles.navItem} ${pathname === '/' ? styles.active : ''}`}>
+          <Link href="/" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', width: '100%' }}>
+            <span className={styles.icon}>🎯</span> Dashboard
+          </Link>
         </li>
-        <li 
-          className={`${styles.navItem} ${activeTab === 'map' ? styles.active : ''}`}
-          onClick={() => setActiveTab('map')}
-        >
-          <span className={styles.icon}>🌍</span> Global Disruption Map
+        <li className={`${styles.navItem} ${pathname === '/map' ? styles.active : ''}`}>
+          <Link href="/map" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', width: '100%' }}>
+            <span className={styles.icon}>🌍</span> Global Disruption Map
+          </Link>
         </li>
-        <li 
-          className={`${styles.navItem} ${activeTab === 'suppliers' ? styles.active : ''}`}
-          onClick={() => setActiveTab('suppliers')}
-        >
-          <span className={styles.icon}>📦</span> Suppliers
+        <li className={`${styles.navItem} ${pathname === '/suppliers' ? styles.active : ''}`}>
+          <Link href="/suppliers" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', width: '100%' }}>
+            <span className={styles.icon}>📦</span> Suppliers
+          </Link>
         </li>
-        <li 
-          className={`${styles.navItem} ${activeTab === 'intelligence' ? styles.active : ''}`}
-          onClick={() => setActiveTab('intelligence')}
-        >
-          <span className={styles.icon}>🧠</span> Intelligence Engine
+        <li className={`${styles.navItem} ${pathname === '/intelligence' ? styles.active : ''}`}>
+          <Link href="/intelligence" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', width: '100%' }}>
+            <span className={styles.icon}>🧠</span> Intelligence Engine
+          </Link>
         </li>
       </ul>
 
