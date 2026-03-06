@@ -5,6 +5,7 @@ import styles from './page.module.css';
 import { mockDisruptions, DisruptionEvent } from '@/data/mockData';
 import RiskAnalysisPanel from '@/components/RiskPanel';
 import ActionInbox from '@/components/ActionInbox';
+import DisruptionMap from '@/components/DisruptionMap';
 
 export default function Home() {
   const [selectedDisruption, setSelectedDisruption] = useState<DisruptionEvent | null>(null);
@@ -83,12 +84,8 @@ export default function Home() {
             <h3>Global Disruption Map</h3>
             <span className={styles.liveTag}>LIVE</span>
           </div>
-          <div className={styles.mapPlaceholder}>
-            {/* Mock positions for the disruptions */}
-            <div className={styles.pulsingDot} style={{ top: '45%', left: '60%', backgroundColor: getSeverityColor('high') }}></div>
-            <div className={styles.pulsingDot} style={{ top: '75%', left: '30%', backgroundColor: getSeverityColor('critical') }}></div>
-            <div className={styles.pulsingDot} style={{ top: '35%', left: '80%', backgroundColor: getSeverityColor('medium') }}></div>
-            <p className={styles.mapText}>Interactive Map Active<br/><span style={{fontSize: '11px', color: 'var(--text-secondary)'}}>Tracking 42 Tier-1/Tier-2 Nodes</span></p>
+          <div style={{ flex: 1, position: 'relative', minHeight: '500px', backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: '8px', overflow: 'hidden' }}>
+            <DisruptionMap />
           </div>
         </div>
         

@@ -10,6 +10,7 @@ export interface DisruptionEvent {
   affectedSuppliers: string[];
   region: string;
   estimatedDelayDays: number;
+  coordinates: [number, number]; // [longitude, latitude]
 }
 
 export interface Supplier {
@@ -33,6 +34,7 @@ export const mockDisruptions: DisruptionEvent[] = [
     affectedSuppliers: ['SUP-003', 'SUP-012'],
     region: 'Middle East / Red Sea',
     estimatedDelayDays: 14,
+    coordinates: [38.0, 20.0],
   },
   {
     id: 'D-102',
@@ -44,6 +46,7 @@ export const mockDisruptions: DisruptionEvent[] = [
     affectedSuppliers: ['SUP-001'],
     region: 'South America (Chile)',
     estimatedDelayDays: 30,
+    coordinates: [-70.6, -23.6],
   },
   {
     id: 'D-103',
@@ -55,6 +58,7 @@ export const mockDisruptions: DisruptionEvent[] = [
     affectedSuppliers: ['SUP-008'],
     region: 'East Asia',
     estimatedDelayDays: 5,
+    coordinates: [121.0, 23.5],
   },
 ];
 
