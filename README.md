@@ -4,7 +4,7 @@ SupplySense is an intelligent operations Co-Pilot designed specifically for the 
 
 ## The Challenge
 
-Navigating modern manufacturing logistics requires more than just static reporting. For mid-market companies producing EV components, unexpected delays—whether from geopolitical bottlenecks or resource constraints—can quickly spiral into costly production halts.
+Navigating modern manufacturing logistics requires more than just static reporting. For mid-market companies producing EV components, unexpected delays, whether from geopolitical bottlenecks or resource constraints, can quickly spiral into costly production halts.
 
 Unlike large OEMs, Tier-2 suppliers often manage complex international shipping routes without dedicated risk analysis teams. When disruptions strike, they face severe contractual penalties for late deliveries, forcing operations managers to make expensive, split-second decisions with incomplete data.
 
