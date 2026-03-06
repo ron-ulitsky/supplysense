@@ -64,7 +64,8 @@ const DisruptionMap = () => {
         }
         .pulse-animation {
           animation: mapPulse 2s infinite ease-out;
-          transform-origin: center;
+          transform-origin: 50% 50%;
+          transform-box: fill-box;
         }
       `}</style>
     </div>
