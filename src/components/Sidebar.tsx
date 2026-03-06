@@ -1,6 +1,10 @@
+"use client";
+
+import { useState } from 'react';
 import styles from './Sidebar.module.css';
 
 export default function Sidebar() {
+  const [activeTab, setActiveTab] = useState('dashboard');
   return (
     <nav className={`${styles.sidebar} glass-panel`}>
       <div className={styles.logo}>
@@ -9,16 +13,28 @@ export default function Sidebar() {
       </div>
       
       <ul className={styles.navList}>
-        <li className={`${styles.navItem} ${styles.active}`}>
+        <li 
+          className={`${styles.navItem} ${activeTab === 'dashboard' ? styles.active : ''}`}
+          onClick={() => setActiveTab('dashboard')}
+        >
           <span className={styles.icon}>🎯</span> Dashboard
         </li>
-        <li className={styles.navItem}>
+        <li 
+          className={`${styles.navItem} ${activeTab === 'map' ? styles.active : ''}`}
+          onClick={() => setActiveTab('map')}
+        >
           <span className={styles.icon}>🌍</span> Global Disruption Map
         </li>
-        <li className={styles.navItem}>
+        <li 
+          className={`${styles.navItem} ${activeTab === 'suppliers' ? styles.active : ''}`}
+          onClick={() => setActiveTab('suppliers')}
+        >
           <span className={styles.icon}>📦</span> Suppliers
         </li>
-        <li className={styles.navItem}>
+        <li 
+          className={`${styles.navItem} ${activeTab === 'intelligence' ? styles.active : ''}`}
+          onClick={() => setActiveTab('intelligence')}
+        >
           <span className={styles.icon}>🧠</span> Intelligence Engine
         </li>
       </ul>
