@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import { AlertTriangle, CircleDollarSign, Bot, MailWarning } from 'lucide-react';
 import styles from './page.module.css';
 import { mockDisruptions, DisruptionEvent } from '@/data/mockData';
 import RiskAnalysisPanel from '@/components/RiskPanel';
@@ -49,28 +50,28 @@ export default function Home() {
 
       <div className={styles.statsGrid}>
         <div className={styles.statCard}>
-          <span className={styles.statIcon}>⚠️</span>
+          <AlertTriangle className={styles.statIcon} size={24} style={{ color: 'var(--danger-color)' }} />
           <div className={styles.statInfo}>
             <div className={styles.statValue}>3</div>
             <div className={styles.statLabel}>Active Disruptions</div>
           </div>
         </div>
         <div className={styles.statCard}>
-          <span className={styles.statIcon}>💰</span>
+          <CircleDollarSign className={styles.statIcon} size={24} style={{ color: 'var(--accent-color)' }} />
           <div className={styles.statInfo}>
             <div className={styles.statValue}>$12.4M</div>
             <div className={styles.statLabel}>Revenue at Risk</div>
           </div>
         </div>
         <div className={styles.statCard}>
-          <span className={styles.statIcon}>🤖</span>
+          <Bot className={styles.statIcon} size={24} style={{ color: 'var(--success-color)' }} />
           <div className={styles.statInfo}>
             <div className={styles.statValue} style={{ color: 'var(--success-color)' }}>14</div>
             <div className={styles.statLabel}>Auto-Mitigations (30d)</div>
           </div>
         </div>
         <div className={styles.statCard}>
-          <span className={styles.statIcon}>📩</span>
+          <MailWarning className={styles.statIcon} size={24} style={{ color: 'var(--warning-color)' }} />
           <div className={styles.statInfo}>
             <div className={styles.statValue} style={{ color: 'var(--warning-color)' }}>2</div>
             <div className={styles.statLabel}>Actions Awaiting Approval</div>

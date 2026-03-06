@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { LayoutDashboard, Globe, Package, BrainCircuit } from 'lucide-react';
 import styles from './Sidebar.module.css';
 
 export default function Sidebar() {
@@ -17,22 +18,22 @@ export default function Sidebar() {
       <ul className={styles.navList}>
         <li className={`${styles.navItem} ${pathname === '/' ? styles.active : ''}`}>
           <Link href="/" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', width: '100%' }}>
-            <span className={styles.icon}>🎯</span> Dashboard
+            <LayoutDashboard className={styles.icon} size={18} /> Dashboard
           </Link>
         </li>
         <li className={`${styles.navItem} ${pathname === '/map' ? styles.active : ''}`}>
           <Link href="/map" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', width: '100%' }}>
-            <span className={styles.icon}>🌍</span> Global Disruption Map
+            <Globe className={styles.icon} size={18} /> Global Disruption Map
           </Link>
         </li>
         <li className={`${styles.navItem} ${pathname === '/suppliers' ? styles.active : ''}`}>
           <Link href="/suppliers" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', width: '100%' }}>
-            <span className={styles.icon}>📦</span> Suppliers
+            <Package className={styles.icon} size={18} /> Suppliers
           </Link>
         </li>
         <li className={`${styles.navItem} ${pathname === '/intelligence' ? styles.active : ''}`}>
           <Link href="/intelligence" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', width: '100%' }}>
-            <span className={styles.icon}>🧠</span> Intelligence Engine
+            <BrainCircuit className={styles.icon} size={18} /> Intelligence Engine
           </Link>
         </li>
       </ul>

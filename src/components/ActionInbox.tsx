@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { CheckCircle2, Mail, Settings, X, Check } from 'lucide-react';
 import styles from './ActionInbox.module.css';
 
 interface ActionItem {
@@ -47,7 +48,7 @@ export default function ActionInbox() {
     return (
       <div className={`${styles.inboxWrapper} glass-panel`}>
         <div className={styles.emptyState}>
-          <span className={styles.icon}>✅</span>
+          <CheckCircle2 className={styles.icon} size={40} />
           <p>Inbox Zero. All AI-recommended actions have been processed.</p>
         </div>
       </div>
@@ -66,7 +67,7 @@ export default function ActionInbox() {
           <div key={action.id} className={styles.actionCard}>
             <div className={styles.cardHeader}>
               <div className={styles.typeTag}>
-                {action.type === 'email' ? '📧 Email Draft' : '⚙️ ERP Command'}
+                {action.type === 'email' ? <><Mail size={12} style={{marginRight: '6px', verticalAlign: 'middle'}}/>Email Draft</> : <><Settings size={12} style={{marginRight: '6px', verticalAlign: 'middle'}}/>ERP Command</>}
               </div>
               <div className={styles.confidence}>AI Confidence: {action.confidence}%</div>
             </div>
@@ -83,13 +84,13 @@ export default function ActionInbox() {
                 className={`${styles.btn} ${styles.btnReject}`}
                 onClick={() => handleAction(action.id, 'rejected')}
               >
-                ✕ Reject Overide
+                <X size={14} style={{ marginRight: '6px', verticalAlign: 'middle' }} /> Reject Overide
               </button>
               <button 
                 className={`${styles.btn} ${styles.btnApprove}`}
                 onClick={() => handleAction(action.id, 'approved')}
               >
-                ✓ Approve & Execute
+                <Check size={14} style={{ marginRight: '6px', verticalAlign: 'middle' }} /> Approve & Execute
               </button>
             </div>
           </div>
