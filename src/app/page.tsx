@@ -38,7 +38,7 @@ export default function Home() {
       
       <div className={styles.headerRow}>
         <div className={styles.titleSection}>
-          <h2 className="title-glow">IonTrack Overview</h2>
+          <h2 className="title-glow">SupplySense Overview</h2>
           <p>Global disruption risk assessment for Tier-2 EV Supply Chain.</p>
         </div>
         <div className={styles.controls}>
@@ -94,7 +94,7 @@ export default function Home() {
         
         <div className={styles.sideSection}>
           <div className={styles.sectionHeader}>
-            <h3>Intelligence Feed (IonTrack)</h3>
+            <h3>Intelligence Feed (SupplySense)</h3>
           </div>
           <div className={styles.feedList}>
             {mockDisruptions.map((disruption) => (
