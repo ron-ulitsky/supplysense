@@ -1,0 +1,113 @@
+'use client';
+
+import { useState } from 'react';
+import styles from './RiskPanel.module.css';
+import { DisruptionEvent } from '@/data/mockData';
+import { AIAnalysisResult, mockAIAnalysis } from '@/data/mockAIResult';
+
+interface Props {
+  disruption: DisruptionEvent | null;
+  onClose: () => void;
+}
+
+export default function RiskAnalysisPanel({ disruption, onClose }: Props) {
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysis, setAnalysis] = useState<AIAnalysisResult | null>(null);
+
+  if (!disruption) return null;
+
+  const handleAnalyze = () => {
+    setIsAnalyzing(true);
+    // Simulate API call to Gemini backend
+    setTimeout(() => {
+      setAnalysis(mockAIAnalysis);
+      setIsAnalyzing(false);
+    }, 2500);
+  };
+
+  const getImpactColor = (impact: string) => {
+    if (impact.startsWith('High')) return 'var(--danger-color)';
+    if (impact.startsWith('Medium')) return 'var(--warning-color)';
+    return 'var(--success-color)';
+  };
+
+  return (
+    <div className={`${styles.panelWrapper} glass-panel`}>
+      <div className={styles.header}>
+        <h3>Risk Intelligence Report</h3>
+        <button className={styles.closeBtn} onClick={onClose}>✕</button>
+      </div>
+
+      <div className={styles.disruptionDetails}>
+        <h4 className="title-glow">{disruption.title}</h4>
+        <p className={styles.region}>📍 {disruption.region}</p>
+        <div className={styles.impactTags}>
+          {disruption.affectedComponents.map(c => (
+            <span key={c} className={styles.tag}>{c}</span>
+          ))}
+        </div>
+      </div>
+
+      {!analysis && !isAnalyzing && (
+        <div className={styles.actionState}>
+          <p>SupplySense AI is standing by to evaluate mitigation strategies.</p>
+          <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={handleAnalyze}>
+            Generate AI Mitigation Plan
+          </button>
+        </div>
+      )}
+
+      {isAnalyzing && (
+        <div className={styles.actionState}>
+          <div className={styles.spinner}></div>
+          <p className={styles.thinkingText}>Gemini AI is simulating trade-offs for SLA Cost vs Resilience...</p>
+        </div>
+      )}
+
+      {analysis && (
+        <div className={styles.analysisResults}>
+          <div className={styles.summaryBox}>
+            <span className={styles.icon}>🧠</span>
+            <p>{analysis.analysisSummary}</p>
+          </div>
+
+          <h5 className={styles.stratTitle}>Recommended Mitigation Strategies</h5>
+          <div className={styles.strategiesList}>
+            {analysis.strategies.map((strat, idx) => (
+              <div key={strat.id} className={styles.strategyCard}>
+                <div className={styles.stratHeader}>
+                  <div className={styles.badge}>Option {idx + 1}</div>
+                  <h6>{strat.name}</h6>
+                </div>
+                <p className={styles.stratDesc}>{strat.description}</p>
+                
+                <div className={styles.tradeoffs}>
+                  <div className={styles.tradeoffRow}>
+                    <span className={styles.label}>Cost:</span>
+                    <span style={{color: getImpactColor(strat.tradeoffs.costImpact)}}>{strat.tradeoffs.costImpact}</span>
+                  </div>
+                  <div className={styles.tradeoffRow}>
+                    <span className={styles.label}>SLA Risk:</span>
+                    <span style={{color: getImpactColor(strat.tradeoffs.serviceLevelImpact)}}>{strat.tradeoffs.serviceLevelImpact}</span>
+                  </div>
+                  <div className={styles.tradeoffRow}>
+                    <span className={styles.label}>Resilience:</span>
+                    <span style={{color: getImpactColor(strat.tradeoffs.resilienceImpact)}}>{strat.tradeoffs.resilienceImpact}</span>
+                  </div>
+                </div>
+
+                <div className={styles.actions}>
+                  {strat.suggestedActions.map((action, aIdx) => (
+                    <button key={aIdx} className={styles.actionBtn}>
+                      Execute: {action}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

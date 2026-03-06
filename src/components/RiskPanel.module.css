@@ -1,0 +1,264 @@
+.panelWrapper {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 450px;
+  max-height: calc(100vh - 120px);
+  background: var(--panel-bg);
+  border: 1px solid var(--accent-glow);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px var(--accent-glow);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(120%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--panel-border);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.header h3 {
+  font-size: 16px;
+  color: #fff;
+  margin: 0;
+}
+
+.closeBtn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.closeBtn:hover {
+  color: #fff;
+}
+
+.disruptionDetails {
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.disruptionDetails h4 {
+  font-size: 18px;
+  color: var(--danger-color);
+  margin-bottom: 8px;
+  margin-top: 0;
+}
+
+.region {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.impactTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  background: rgba(88, 166, 255, 0.1);
+  color: var(--accent-color);
+  border: 1px solid rgba(88, 166, 255, 0.3);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.actionState {
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex: 1;
+}
+
+.actionState p {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnPrimary {
+  background: linear-gradient(135deg, var(--accent-color), #8a2be2);
+  color: #fff;
+  box-shadow: 0 0 15px rgba(88, 166, 255, 0.4);
+}
+
+.btnPrimary:hover {
+  filter: brightness(1.2);
+  transform: translateY(-1px);
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--accent-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.thinkingText {
+  color: var(--accent-color) !important;
+  font-family: monospace;
+  animation: pulse 1.5s infinite;
+}
+
+.analysisResults {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.summaryBox {
+  background: rgba(46, 160, 67, 0.1);
+  border-left: 3px solid var(--success-color);
+  padding: 12px 16px;
+  display: flex;
+  gap: 12px;
+  border-radius: 0 6px 6px 0;
+  margin-bottom: 24px;
+}
+
+.summaryBox p {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #fff;
+  margin: 0;
+}
+
+.stratTitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.strategiesList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.strategyCard {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  padding: 16px;
+  transition: background 0.2s;
+}
+
+.strategyCard:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.stratHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.badge {
+  background: var(--text-primary);
+  color: var(--bg-color);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.stratHeader h6 {
+  font-size: 15px;
+  color: #fff;
+  margin: 0;
+}
+
+.stratDesc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin-bottom: 16px;
+}
+
+.tradeoffs {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.tradeoffRow {
+  display: flex;
+  margin-bottom: 6px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.tradeoffRow:last-child {
+  margin-bottom: 0;
+}
+
+.label {
+  color: var(--text-secondary);
+  width: 70px;
+  flex-shrink: 0;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.actionBtn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.actionBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #fff;
+}
