@@ -13,7 +13,30 @@ Tier-2 EV manufacturers are vulnerable. They lack enterprise control towers but 
 SupplySense acts as a virtual Co-Pilot that:
 1. **Perceives:** Monitors global disruptions affecting specific critical EV components.
 2. **Reasons:** Uses Google Gemini to simulate trade-offs between freight costs, OEM SLA penalties, and network resilience.
-3. **Acts:** Generates "Human-in-the-Loop" actionable drafts (e.g., supplier emails, ERP stock adjustments) in a dedicated Action Inbox. 
+## Architecture
+
+```mermaid
+flowchart TD
+    subgraph Perception["1. Perception Layer (Next.js & Google Maps)"]
+        A[Global Disruption Signals] --> B(Intelligence Feed)
+        C[ERP Mock Data] --> B
+    end
+
+    subgraph Intelligence["2. Risk Intelligence Engine (Backend)"]
+        B -->|Event Context & Supplier Profile| D{Google Gemini 2.5 API}
+        D -.->|Simulates Trade-offs| E[Cost vs. SLA vs. Resilience]
+        E -->|Output JSON| F[Mitigation Strategies]
+    end
+
+    subgraph Action["3. Autonomous Action Layer"]
+        F --> G[Action Inbox UI]
+        G -->|Human-in-the-Loop Approval| H(Execute: ERP Update)
+        G -->|Human-in-the-Loop Approval| I(Execute: Email Draft)
+    end
+
+    classDef google fill:#fff,stroke:#4285F4,stroke-width:2px;
+    class D google;
+```
 
 ## Tech Stack
 - **Frontend Layer:** Next.js (App Router), React, Global CSS (glassmorphic dark theme).
