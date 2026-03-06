@@ -1,4 +1,4 @@
-import { NextResponse } from 'next';
+import { NextResponse } from 'next/server';
 import { GoogleGenAI } from '@google/genai';
 
 import { mockAIAnalysis } from '@/data/mockAIResult';
