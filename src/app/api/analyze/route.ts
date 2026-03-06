@@ -1,9 +1,11 @@
 import { NextResponse } from 'next';
 import { GoogleGenAI } from '@google/genai';
 
+import { mockAIAnalysis } from '@/data/mockAIResult';
+
 // Initialize the Gemini client
-// Note: In a real app, ensure process.env.GEMINI_API_KEY is set
-const ai = new GoogleGenAI({});
+const apiKey = process.env.GEMINI_API_KEY;
+const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
 export async function POST(request: Request) {
   try {
@@ -51,6 +53,12 @@ export async function POST(request: Request) {
         ]
       }
     `;
+
+    // Fallback to mock data if no API key is present
+    if (!ai) {
+      console.warn('GEMINI_API_KEY is missing. Falling back to mock data for demo purposes.');
+      return NextResponse.json(mockAIAnalysis);
+    }
 
     // Call Gemini 2.5 Flash for fast reasoning
     const response = await ai.models.generateContent({
