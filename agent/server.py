@@ -22,9 +22,12 @@ from google.adk.agents import Agent
 from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
+from agent.agent import root_agent
+import os
+from dotenv import load_dotenv
 
-from agent import root_agent
-
+# Load environment variables securely from the Next.js .env.local file
+load_dotenv(dotenv_path=".env.local")
 
 # ---------------------------------------------------------------------------
 # Pydantic Models
