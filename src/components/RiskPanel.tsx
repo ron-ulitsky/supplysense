@@ -4,6 +4,7 @@ import { useState } from 'react';
 import styles from './RiskPanel.module.css';
 import { DisruptionEvent } from '@/data/mockData';
 import { AIAnalysisResult, mockAIAnalysis } from '@/data/mockAIResult';
+import Markdown from './Markdown';
 
 interface Props {
   disruption: DisruptionEvent | null;
@@ -86,7 +87,7 @@ export default function RiskAnalysisPanel({ disruption, onClose, companyProfile 
         <div className={styles.analysisResults}>
           <div className={styles.summaryBox}>
             <span className={styles.icon}>🧠</span>
-            <p>{analysis.analysisSummary}</p>
+            <Markdown>{analysis.analysisSummary}</Markdown>
           </div>
 
           <h5 className={styles.stratTitle}>Recommended Mitigation Strategies</h5>
@@ -112,7 +113,7 @@ export default function RiskAnalysisPanel({ disruption, onClose, companyProfile 
                     Explain Logic ✨
                   </button>
                 </div>
-                <p className={styles.stratDesc}>{strat.description}</p>
+                <div className={styles.stratDesc}><Markdown>{strat.description}</Markdown></div>
 
                 {visibleExplanation === strat.id && (
                   <div style={{
@@ -123,7 +124,7 @@ export default function RiskAnalysisPanel({ disruption, onClose, companyProfile 
                     fontSize: '0.85rem',
                     color: 'var(--text-secondary)'
                   }}>
-                    <strong>AI Reasoning:</strong> {strat.explanation}
+                    <strong>AI Reasoning:</strong> <Markdown>{strat.explanation}</Markdown>
                   </div>
                 )}
 

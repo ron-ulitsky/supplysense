@@ -13,6 +13,7 @@ export default function Home() {
   const [companyProfile, setCompanyProfile] = useState("Company A: High Cash, Low Inventory Buffer");
   const [disruptions, setDisruptions] = useState<DisruptionEvent[]>(mockDisruptions);
   const [isScanning, setIsScanning] = useState(false);
+  const [hoveredDisruptionId, setHoveredDisruptionId] = useState<string | null>(null);
 
   const handleGlobalScan = async () => {
     setIsScanning(true);
@@ -21,7 +22,7 @@ export default function Home() {
       if (response.ok) {
         const newDisruption = await response.json();
         setDisruptions(prev => [newDisruption, ...prev]);
-        setSelectedDisruption(newDisruption); // Auto-select the new one
+        setSelectedDisruption(newDisruption);
       } else {
         console.error("Failed to fetch scan data");
       }
@@ -139,7 +140,7 @@ export default function Home() {
             <span className={styles.liveTag}>LIVE</span>
           </div>
           <div style={{ flex: 1, position: 'relative', minHeight: '500px', backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: '8px', overflow: 'hidden' }}>
-            <DisruptionMap />
+            <DisruptionMap hoveredId={hoveredDisruptionId} onHover={setHoveredDisruptionId} />
           </div>
         </div>
 
@@ -151,8 +152,10 @@ export default function Home() {
             {disruptions.map((disruption) => (
               <div
                 key={disruption.id}
-                className={styles.feedItem}
+                className={`${styles.feedItem} ${hoveredDisruptionId === disruption.id ? styles.feedItemHighlighted : ''}`}
                 onClick={() => setSelectedDisruption(disruption)}
+                onMouseEnter={() => setHoveredDisruptionId(disruption.id)}
+                onMouseLeave={() => setHoveredDisruptionId(null)}
               >
                 <div className={`${styles.severity} ${getSeverityClass(disruption.severity)}`}></div>
                 <div className={styles.feedContent}>

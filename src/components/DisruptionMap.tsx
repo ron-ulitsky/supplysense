@@ -13,7 +13,12 @@ import { mockDisruptions } from "@/data/mockData";
 // TopoJSON for world map 
 const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
-const DisruptionMap = () => {
+interface DisruptionMapProps {
+  hoveredId: string | null;
+  onHover: (id: string | null) => void;
+}
+
+const DisruptionMap = ({ hoveredId, onHover }: DisruptionMapProps) => {
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case 'critical': return 'var(--danger-color)';
@@ -49,12 +54,26 @@ const DisruptionMap = () => {
               ))
             }
           </Geographies>
-          {mockDisruptions.map((disruption) => (
-            <Marker key={disruption.id} coordinates={disruption.coordinates}>
-              <circle r={4} fill={getSeverityColor(disruption.severity)} stroke="#fff" strokeWidth={1} />
-              <circle r={12} fill={getSeverityColor(disruption.severity)} opacity={0.4} className="pulse-animation" />
-            </Marker>
-          ))}
+          {mockDisruptions.map((disruption) => {
+            const isHovered = hoveredId === disruption.id;
+            return (
+              <Marker key={disruption.id} coordinates={disruption.coordinates}>
+                <g
+                  onMouseEnter={() => onHover(disruption.id)}
+                  onMouseLeave={() => onHover(null)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <circle r={isHovered ? 7 : 4} fill={getSeverityColor(disruption.severity)} stroke="#fff" strokeWidth={isHovered ? 2 : 1} style={{ transition: 'r 0.2s, stroke-width 0.2s' }} />
+                  <circle r={isHovered ? 18 : 12} fill={getSeverityColor(disruption.severity)} opacity={isHovered ? 0.6 : 0.4} className="pulse-animation" />
+                  {isHovered && (
+                    <text textAnchor="middle" y={-14} style={{ fontSize: '8px', fill: '#fff', fontWeight: 'bold', pointerEvents: 'none' }}>
+                      {disruption.title.length > 30 ? disruption.title.slice(0, 30) + '…' : disruption.title}
+                    </text>
+                  )}
+                </g>
+              </Marker>
+            );
+          })}
         </ZoomableGroup>
       </ComposableMap>
       <style jsx global>{`
