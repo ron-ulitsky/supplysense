@@ -14,8 +14,8 @@ import { mockDisruptions } from "@/data/mockData";
 const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
 interface DisruptionMapProps {
-  hoveredId: string | null;
-  onHover: (id: string | null) => void;
+  hoveredId?: string | null;
+  onHover?: (id: string | null) => void;
 }
 
 const DisruptionMap = ({ hoveredId, onHover }: DisruptionMapProps) => {
