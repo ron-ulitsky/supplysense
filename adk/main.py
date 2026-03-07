@@ -5,6 +5,10 @@ from pydantic import BaseModel, Field
 from typing import List, Dict, Any, Optional
 from google import genai
 from google.genai import types
+from dotenv import load_dotenv
+
+# Load environment variables from Next.js .env.local file
+load_dotenv(dotenv_path="../.env.local")
 
 # Initialize FastAPI app
 app = FastAPI(title="SupplySense ADK Backend")
