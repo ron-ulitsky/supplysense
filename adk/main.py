@@ -238,6 +238,8 @@ async def perform_global_scan():
       Use current understanding of geopolitics, weather patterns, or common industrial failures.
       
       Generate a unique ID (e.g., "D-105", "D-106"), a vivid title, and details.
+      Also provide an integer between 1-99 for "polymarketProbability", predicting the Polymarket market odds of this event escalating into a sustained global shortage.
+      
       Output your response ONLY as valid JSON matching this exact schema:
       {
         "id": "D-10X",
@@ -247,7 +249,8 @@ async def perform_global_scan():
         "region": "The geographic region affected",
         "affectedComponents": ["Component 1", "Component 2"],
         "estimatedDelayDays": integer,
-        "timestamp": "Current ISO timestamp (e.g., 2026-03-06T12:00:00Z)"
+        "timestamp": "Current ISO timestamp (e.g., 2026-03-06T12:00:00Z)",
+        "polymarketProbability": 82
       }
     """
     

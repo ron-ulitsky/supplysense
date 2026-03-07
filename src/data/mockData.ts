@@ -11,6 +11,7 @@ export interface DisruptionEvent {
   region: string;
   estimatedDelayDays: number;
   coordinates: [number, number]; // [longitude, latitude]
+  polymarketProbability?: number; // Simulated Polymarket integration
 }
 
 export interface Supplier {

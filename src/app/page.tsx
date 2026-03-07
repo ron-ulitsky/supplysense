@@ -165,6 +165,21 @@ export default function Home() {
                   <span className={styles.timestamp} suppressHydrationWarning>
                     {new Date(disruption.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
+                  {disruption.polymarketProbability && (
+                    <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span style={{
+                        background: 'rgba(28, 104, 241, 0.1)',
+                        border: '1px solid rgba(28, 104, 241, 0.5)',
+                        color: '#6aa1fc',
+                        padding: '4px 8px',
+                        borderRadius: '4px',
+                        fontSize: '10px',
+                        fontWeight: '600'
+                      }}>
+                        📈 Polymarket Risk Index: {disruption.polymarketProbability}%
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
