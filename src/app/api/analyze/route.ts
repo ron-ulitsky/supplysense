@@ -25,6 +25,10 @@ export async function POST(request: Request) {
       Company Profile:
       ${JSON.stringify(companyProfile, null, 2)}
       
+      Simulated Memory & Reflection Logs:
+      - Historic Log (May 2025): Air freight out of Shenzhen during Q3 peak experienced 5-day customs delay. High risk.
+      - Profile Directive: If Company is "Cash-Rich," prioritize SLA at all costs. If "Cash-Poor," optimize for margin preservation. 
+      
       Current Disruption Event:
       ${JSON.stringify(disruption, null, 2)}
       
@@ -34,6 +38,7 @@ export async function POST(request: Request) {
       Task:
       Analyze this disruption and generate exactly 3 distinct mitigation strategies. 
       For each strategy, you must evaluate the trade-offs between Cost, Service Level (SLA adherence to OEMs), and Resilience.
+      CRITICAL: You must provide a clear, one-sentence "explanation" that traces exactly *why* you made this recommendation based on the company profile, historical logs, and mathematics of the disruption.
       
       Output your response ONLY as valid JSON matching this schema:
       {
@@ -43,6 +48,7 @@ export async function POST(request: Request) {
             "id": "strategy_1",
             "name": "Short descriptive name",
             "description": "Detailed explanation of the action to take",
+            "explanation": "Provides decision transparency (e.g. why this is better than alternative X given the company profile).",
             "tradeoffs": {
               "costImpact": "High/Medium/Low - with brief explanation",
               "serviceLevelImpact": "High/Medium/Low - with brief explanation",
@@ -62,18 +68,18 @@ export async function POST(request: Request) {
 
     // Call Gemini 2.5 Flash for fast reasoning
     const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt,
-        config: {
-            temperature: 0.2,
-            responseMimeType: "application/json",
-        }
+      model: 'gemini-2.5-flash',
+      contents: prompt,
+      config: {
+        temperature: 0.2,
+        responseMimeType: "application/json",
+      }
     });
 
     if (!response.text) {
-        throw new Error("Gemini returned an empty response.");
+      throw new Error("Gemini returned an empty response.");
     }
-    
+
     // Parse the JSON response
     const analysisResult = JSON.parse(response.text);
 

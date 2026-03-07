@@ -8,21 +8,39 @@ import { AIAnalysisResult, mockAIAnalysis } from '@/data/mockAIResult';
 interface Props {
   disruption: DisruptionEvent | null;
   onClose: () => void;
+  companyProfile: string;
 }
 
-export default function RiskAnalysisPanel({ disruption, onClose }: Props) {
+export default function RiskAnalysisPanel({ disruption, onClose, companyProfile }: Props) {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<AIAnalysisResult | null>(null);
+  const [visibleExplanation, setVisibleExplanation] = useState<string | null>(null);
 
   if (!disruption) return null;
 
-  const handleAnalyze = () => {
+  const handleAnalyze = async () => {
     setIsAnalyzing(true);
-    // Simulate API call to Gemini backend
-    setTimeout(() => {
-      setAnalysis(mockAIAnalysis);
+    setAnalysis(null);
+    setVisibleExplanation(null);
+
+    try {
+      const res = await fetch('/api/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          disruption,
+          companyProfile,
+          supplierDetails: { mock: "details" } // Mocking supplier details for now
+        })
+      });
+
+      const data = await res.json();
+      setAnalysis(data);
+    } catch (error) {
+      console.error("Failed to analyze", error);
+    } finally {
       setIsAnalyzing(false);
-    }, 2500);
+    }
   };
 
   const getImpactColor = (impact: string) => {
@@ -60,7 +78,7 @@ export default function RiskAnalysisPanel({ disruption, onClose }: Props) {
       {isAnalyzing && (
         <div className={styles.actionState}>
           <div className={styles.spinner}></div>
-          <p className={styles.thinkingText}>Gemini AI is simulating trade-offs for SLA Cost vs Resilience...</p>
+          <p className={styles.thinkingText}>Gemini AI is simulating trade-offs for {companyProfile.split(':')[0]}...</p>
         </div>
       )}
 
@@ -78,21 +96,49 @@ export default function RiskAnalysisPanel({ disruption, onClose }: Props) {
                 <div className={styles.stratHeader}>
                   <div className={styles.badge}>Option {idx + 1}</div>
                   <h6>{strat.name}</h6>
+                  <button
+                    onClick={() => setVisibleExplanation(visibleExplanation === strat.id ? null : strat.id)}
+                    style={{
+                      marginLeft: 'auto',
+                      background: 'none',
+                      border: '1px solid var(--accent-color)',
+                      color: 'var(--accent-color)',
+                      padding: '4px 8px',
+                      borderRadius: '4px',
+                      fontSize: '0.75rem',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Explain Logic ✨
+                  </button>
                 </div>
                 <p className={styles.stratDesc}>{strat.description}</p>
-                
+
+                {visibleExplanation === strat.id && (
+                  <div style={{
+                    margin: '10px 0',
+                    padding: '10px',
+                    background: 'rgba(88, 101, 242, 0.1)',
+                    borderLeft: '3px solid var(--accent-color)',
+                    fontSize: '0.85rem',
+                    color: 'var(--text-secondary)'
+                  }}>
+                    <strong>AI Reasoning:</strong> {strat.explanation}
+                  </div>
+                )}
+
                 <div className={styles.tradeoffs}>
                   <div className={styles.tradeoffRow}>
                     <span className={styles.label}>Cost:</span>
-                    <span style={{color: getImpactColor(strat.tradeoffs.costImpact)}}>{strat.tradeoffs.costImpact}</span>
+                    <span style={{ color: getImpactColor(strat.tradeoffs.costImpact) }}>{strat.tradeoffs.costImpact}</span>
                   </div>
                   <div className={styles.tradeoffRow}>
                     <span className={styles.label}>SLA Risk:</span>
-                    <span style={{color: getImpactColor(strat.tradeoffs.serviceLevelImpact)}}>{strat.tradeoffs.serviceLevelImpact}</span>
+                    <span style={{ color: getImpactColor(strat.tradeoffs.serviceLevelImpact) }}>{strat.tradeoffs.serviceLevelImpact}</span>
                   </div>
                   <div className={styles.tradeoffRow}>
                     <span className={styles.label}>Resilience:</span>
-                    <span style={{color: getImpactColor(strat.tradeoffs.resilienceImpact)}}>{strat.tradeoffs.resilienceImpact}</span>
+                    <span style={{ color: getImpactColor(strat.tradeoffs.resilienceImpact) }}>{strat.tradeoffs.resilienceImpact}</span>
                   </div>
                 </div>
 

@@ -10,6 +10,15 @@ import DisruptionMap from '@/components/DisruptionMap';
 
 export default function Home() {
   const [selectedDisruption, setSelectedDisruption] = useState<DisruptionEvent | null>(null);
+  const [companyProfile, setCompanyProfile] = useState("Company A: High Cash, Low Inventory Buffer");
+
+  const toggleProfile = () => {
+    setCompanyProfile(prev =>
+      prev === "Company A: High Cash, Low Inventory Buffer"
+        ? "Company B: Low Cash, High Inventory Buffer"
+        : "Company A: High Cash, Low Inventory Buffer"
+    );
+  };
 
   const getSeverityClass = (severity: string) => {
     switch (severity) {
@@ -33,17 +42,35 @@ export default function Home() {
 
   return (
     <div className={styles.dashboard} style={{ position: 'relative' }}>
-      <RiskAnalysisPanel 
-        disruption={selectedDisruption} 
-        onClose={() => setSelectedDisruption(null)} 
+      <RiskAnalysisPanel
+        disruption={selectedDisruption}
+        onClose={() => setSelectedDisruption(null)}
+        companyProfile={companyProfile}
       />
-      
+
       <div className={styles.headerRow}>
         <div className={styles.titleSection}>
           <h2 className="title-glow">SupplySense Overview</h2>
           <p>Global disruption risk assessment for Tier-2 EV Supply Chain.</p>
         </div>
         <div className={styles.controls}>
+          <div className={styles.profileToggleSection} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginRight: '20px' }}>
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Active Profile:</span>
+            <button
+              onClick={toggleProfile}
+              style={{
+                background: 'rgba(255,255,255,0.05)',
+                border: '1px solid var(--border-color)',
+                color: 'var(--text-primary)',
+                padding: '6px 12px',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '0.85rem'
+              }}
+            >
+              {companyProfile.split(':')[0]} ⇄
+            </button>
+          </div>
           <button className={`${styles.btn} ${styles.btnPrimary}`}>Run Global AI Scan</button>
         </div>
       </div>
@@ -89,15 +116,15 @@ export default function Home() {
             <DisruptionMap />
           </div>
         </div>
-        
+
         <div className={styles.sideSection}>
           <div className={styles.sectionHeader}>
             <h3>Intelligence Feed (SupplySense)</h3>
           </div>
           <div className={styles.feedList}>
             {mockDisruptions.map((disruption) => (
-              <div 
-                key={disruption.id} 
+              <div
+                key={disruption.id}
                 className={styles.feedItem}
                 onClick={() => setSelectedDisruption(disruption)}
               >
@@ -105,13 +132,13 @@ export default function Home() {
                 <div className={styles.feedContent}>
                   <h4>{disruption.title}</h4>
                   <p>Affects: {disruption.affectedComponents.join(', ')}</p>
-                  <p style={{fontSize: '10px', marginTop: '2px'}}>+ {disruption.estimatedDelayDays} Days Lead Time</p>
-                  <span className={styles.timestamp}>{new Date(disruption.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                  <p style={{ fontSize: '10px', marginTop: '2px' }}>+ {disruption.estimatedDelayDays} Days Lead Time</p>
+                  <span className={styles.timestamp}>{new Date(disruption.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                 </div>
               </div>
             ))}
           </div>
-          
+
           <div style={{ marginTop: '24px', flex: 1 }}>
             <ActionInbox />
           </div>
