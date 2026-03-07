@@ -59,8 +59,8 @@ const DisruptionMap = ({ hoveredId, onHover }: DisruptionMapProps) => {
             return (
               <Marker key={disruption.id} coordinates={disruption.coordinates}>
                 <g
-                  onMouseEnter={() => onHover(disruption.id)}
-                  onMouseLeave={() => onHover(null)}
+                  onMouseEnter={() => onHover?.(disruption.id)}
+                  onMouseLeave={() => onHover?.(null)}
                   style={{ cursor: 'pointer' }}
                 >
                   <circle r={isHovered ? 7 : 4} fill={getSeverityColor(disruption.severity)} stroke="#fff" strokeWidth={isHovered ? 2 : 1} style={{ transition: 'r 0.2s, stroke-width 0.2s' }} />
