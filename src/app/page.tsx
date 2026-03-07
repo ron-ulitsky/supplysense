@@ -11,6 +11,26 @@ import DisruptionMap from '@/components/DisruptionMap';
 export default function Home() {
   const [selectedDisruption, setSelectedDisruption] = useState<DisruptionEvent | null>(null);
   const [companyProfile, setCompanyProfile] = useState("Company A: High Cash, Low Inventory Buffer");
+  const [disruptions, setDisruptions] = useState<DisruptionEvent[]>(mockDisruptions);
+  const [isScanning, setIsScanning] = useState(false);
+
+  const handleGlobalScan = async () => {
+    setIsScanning(true);
+    try {
+      const response = await fetch('/api/scan');
+      if (response.ok) {
+        const newDisruption = await response.json();
+        setDisruptions(prev => [newDisruption, ...prev]);
+        setSelectedDisruption(newDisruption); // Auto-select the new one
+      } else {
+        console.error("Failed to fetch scan data");
+      }
+    } catch (error) {
+      console.error("Error running global scan:", error);
+    } finally {
+      setIsScanning(false);
+    }
+  };
 
   const toggleProfile = () => {
     setCompanyProfile(prev =>
@@ -71,7 +91,13 @@ export default function Home() {
               {companyProfile.split(':')[0]} ⇄
             </button>
           </div>
-          <button className={`${styles.btn} ${styles.btnPrimary}`}>Run Global AI Scan</button>
+          <button
+            className={`${styles.btn} ${styles.btnPrimary}`}
+            onClick={handleGlobalScan}
+            disabled={isScanning}
+          >
+            {isScanning ? 'Scanning Globe...' : 'Run Global AI Scan'}
+          </button>
         </div>
       </div>
 
@@ -122,7 +148,7 @@ export default function Home() {
             <h3>Intelligence Feed (SupplySense)</h3>
           </div>
           <div className={styles.feedList}>
-            {mockDisruptions.map((disruption) => (
+            {disruptions.map((disruption) => (
               <div
                 key={disruption.id}
                 className={styles.feedItem}
