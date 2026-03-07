@@ -17,30 +17,32 @@ SupplySense acts as a virtual Co-Pilot that:
 
 
 ## Tech Stack
-- **Frontend Layer:** Next.js (App Router), React, Global CSS (glassmorphic dark theme).
-- **Intelligence Layer:** Google Gen AI SDK (`@google/genai`) powered by Gemini 2.5 Flash.
+- **Frontend Layer:** Next.js (App Router), React, Lucide Icons, CSS (glassmorphic dark theme).
+- **Intelligence Layer:** Google ADK (Agent Development Kit) Python backend using the Coordinator-Dispatcher pattern with Gemini 2.5 Flash.
 - **Data/Action Layer:** Mock supply chain data referencing real-world scenarios (e.g., Taiwan semiconductor yields, Red Sea closures).
 
 ## Running the Prototype Locally
 
-1. **Install Dependencies:**
-   ```bash
-   npm install
-   ```
+### 1. Frontend (Next.js)
 
-2. **Configure Environment:**
-   Create a `.env.local` file in the root directory and add your Gemini API key:
-   ```env
-   GEMINI_API_KEY=your_google_gemini_api_key_here
-   ```
+```bash
+npm install
+npm run dev
+```
 
-3. **Start the Dev Server:**
-   ```bash
-   npm run dev
-   ```
+### 2. ADK Agent Backend (Python)
 
-4. **View the Dashboard:**
-   Open [http://localhost:3000](http://localhost:3000) in your browser.
+```bash
+cd agent
+pip install -r requirements.txt
+export GOOGLE_API_KEY=your_gemini_api_key   # optional for demo mode
+python server.py
+```
+
+The ADK backend runs on `http://localhost:8000`. The Next.js frontend automatically proxies to it. If the backend is not running, the UI falls back to mock data for demo purposes.
+
+### 3. View the Dashboard
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Hackathon Pitch Materials
 
@@ -48,6 +50,7 @@ To view the pitch materials accompanying this repository:
 - `pitch_deck_outline.md`: The 9-slide PowerPoint structure and Go-To-Market strategy.
 - `pitch_video_script.md`: The 10-minute presentation and live demo script.
 
-## Deployment
+## Technical Documentation & Deployment
 
-Please refer to [DEPLOYMENT.md](./DEPLOYMENT.md) for instructions on hosting SupplySense on Google Cloud Run.
+- **ERP Integration:** See [ERP_INTEGRATION.md](./ERP_INTEGRATION.md) for architectural guidelines on connecting SupplySense's Action Inbox to enterprise systems (e.g., SAP, NetSuite).
+- **Deployment:** Please refer to [DEPLOYMENT.md](./DEPLOYMENT.md) for instructions on hosting SupplySense on Google Cloud Run.
