@@ -60,6 +60,18 @@ export const mockDisruptions: DisruptionEvent[] = [
     estimatedDelayDays: 5,
     coordinates: [121.0, 23.5],
   },
+  {
+    id: 'D-104',
+    title: 'Tier-3 Thermal Sensor Supplier Financial Restructuring',
+    description: 'PROACTIVE WARNING: Market signals indicate EuroSensor GmbH is entering early-stage financial restructuring. High probability of production halts in 3-4 weeks.',
+    severity: 'medium',
+    timestamp: new Date().toISOString(),
+    affectedComponents: ['Thermal Sensors', 'Proximity Sensors'],
+    affectedSuppliers: ['SUP-012'],
+    region: 'Europe (Germany)',
+    estimatedDelayDays: 21,
+    coordinates: [51.1657, 10.4515],
+  },
 ];
 
 export const mockSuppliers: Supplier[] = [
