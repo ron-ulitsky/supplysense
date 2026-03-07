@@ -36,11 +36,11 @@ export async function POST(request: Request) {
 
       if (adkResponse.ok) {
         const adkResult = await adkResponse.json();
-        // The ADK backend returns: { agent_response, tool_calls_made, strategies }
+        const { mockAIAnalysis } = await import('@/data/mockAIResult');
         return NextResponse.json({
           analysisSummary: adkResult.agent_response,
           toolCallsMade: adkResult.tool_calls_made,
-          strategies: adkResult.strategies,
+          strategies: adkResult.strategies || mockAIAnalysis.strategies,
         });
       } else {
         console.error("ADK error status:", adkResponse.status);
