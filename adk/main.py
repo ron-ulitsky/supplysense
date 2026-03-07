@@ -1,5 +1,7 @@
 import os
 import json
+import uuid
+import requests
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from typing import List, Dict, Any, Optional
@@ -277,12 +279,12 @@ async def perform_global_scan():
       
       Use that real event as the basis to generate ONE highly specific, concerning supply chain disruption simulation.
       
-      Generate a unique ID (e.g., "D-105"), a vivid title based on the event, and details.
+      Generate a vivid title based on the event, and details.
       CRITICAL: You MUST use the EXACT Live Polymarket Probability percentage from your chosen event for the "polymarketProbability" field.
       
       Output your response ONLY as valid JSON matching this exact schema:
       {{
-        "id": "D-10X",
+        "id": "WILL_BE_REPLACED",
         "title": "A 5-10 word descriptive title based on the real Polymarket event",
         "description": "A detailed 2-3 sentence description blending the real global event with its simulated direct supply chain impact.",
         "severity": "High" (or "Medium" or "Critical"),
@@ -310,6 +312,7 @@ async def perform_global_scan():
                 text = text[:-3]
                 
             disruption_data = json.loads(text.strip())
+            disruption_data['id'] = str(uuid.uuid4()) # Force unique UUID to prevent React key collisions
             return disruption_data
             
         raise HTTPException(status_code=500, detail="Model returned an empty text response.")
