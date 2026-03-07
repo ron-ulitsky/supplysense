@@ -225,33 +225,73 @@ async def analyze_disruption(request: AnalyzeRequest):
         print(f"Error during ADK generation: {e}")
         raise HTTPException(status_code=500, detail=f"AI Request Failed: {str(e)}")
 
+import requests
+
 @app.get("/scan")
 async def perform_global_scan():
     if not client:
         raise HTTPException(status_code=500, detail="GEMINI_API_KEY is not set.")
 
-    prompt = """
+    # 1. Fetch Real live events from Polymarket
+    polymarket_events_text = "ERROR: Could not fetch Polymarket data"
+    try:
+        url = "https://gamma-api.polymarket.com/events"
+        # Fetch highly active, current global events
+        res = requests.get(url, params={"limit": 20, "active": "true", "closed": "false"})
+        events = res.json()
+        
+        market_summaries = []
+        for e in events:
+            if "markets" in e and len(e["markets"]) > 0:
+                market = e["markets"][0]
+                question = market.get("question", "")
+                outcomes = json.loads(market.get("outcomes", "[]"))
+                prices = json.loads(market.get("outcomePrices", "[]"))
+                
+                # Try to map 'Yes' probability if it's a binary market, otherwise just the first price
+                prob = 0
+                if len(prices) > 0:
+                    try:
+                        prob_index = outcomes.index("Yes") if "Yes" in outcomes else 0
+                        prob = int(float(prices[prob_index]) * 100)
+                    except (ValueError, IndexError):
+                        pass
+
+                market_summaries.append(f"Event: '{question}', Live Polymarket Probability: {prob}%")
+                
+        polymarket_events_text = "\n".join(market_summaries)
+    except Exception as fetch_err:
+        print(f"Polymarket fetch failed: {fetch_err}")
+
+    # 2. Feed the real events into Gemini
+    prompt = f"""
       You are the global events monitor for SupplySense, an Autonomous Supply Chain Resilience Agent.
       
-      Your task is to scan the globe and generate ONE realistic, specific, and highly concerning supply chain disruption 
-      that would affect a Tier-2 EV Parts Manufacturer. 
-      Use current understanding of geopolitics, weather patterns, or common industrial failures.
+      Here are LIVE active markets currently streaming from Polymarket:
+      ---
+      {polymarket_events_text}
+      ---
       
-      Generate a unique ID (e.g., "D-105", "D-106"), a vivid title, and details.
-      Also provide an integer between 1-99 for "polymarketProbability", predicting the Polymarket market odds of this event escalating into a sustained global shortage.
+      Your task is to select ONE of the real Polymarket events above that would most realistically cause a supply chain disruption 
+      for a Tier-2 EV Parts Manufacturer. 
+      
+      Use that real event as the basis to generate ONE highly specific, concerning supply chain disruption simulation.
+      
+      Generate a unique ID (e.g., "D-105"), a vivid title based on the event, and details.
+      CRITICAL: You MUST use the EXACT Live Polymarket Probability percentage from your chosen event for the "polymarketProbability" field.
       
       Output your response ONLY as valid JSON matching this exact schema:
-      {
+      {{
         "id": "D-10X",
-        "title": "A 5-10 word descriptive title",
-        "description": "A detailed 2-3 sentence description of the global event and its direct supply chain impact.",
+        "title": "A 5-10 word descriptive title based on the real Polymarket event",
+        "description": "A detailed 2-3 sentence description blending the real global event with its simulated direct supply chain impact.",
         "severity": "High" (or "Medium" or "Critical"),
         "region": "The geographic region affected",
         "affectedComponents": ["Component 1", "Component 2"],
         "estimatedDelayDays": integer,
         "timestamp": "Current ISO timestamp (e.g., 2026-03-06T12:00:00Z)",
-        "polymarketProbability": 82
-      }
+        "polymarketProbability": integer (The real probability from Polymarket)
+      }}
     """
     
     try:
