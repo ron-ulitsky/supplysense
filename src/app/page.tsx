@@ -133,7 +133,9 @@ export default function Home() {
                   <h4>{disruption.title}</h4>
                   <p>Affects: {disruption.affectedComponents.join(', ')}</p>
                   <p style={{ fontSize: '10px', marginTop: '2px' }}>+ {disruption.estimatedDelayDays} Days Lead Time</p>
-                  <span className={styles.timestamp}>{new Date(disruption.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                  <span className={styles.timestamp} suppressHydrationWarning>
+                    {new Date(disruption.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
                 </div>
               </div>
             ))}
