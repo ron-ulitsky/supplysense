@@ -1,56 +1,70 @@
 FROM node:20-alpine AS base
 
-# Install dependencies only when needed
+# ---------------------------------------------------------------------------
+# Stage 1: Install Node.js dependencies
+# ---------------------------------------------------------------------------
 FROM base AS deps
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Install dependencies based on the preferred package manager
 COPY package.json package-lock.json* ./
 RUN npm ci
 
-# Rebuild the source code only when needed
+# ---------------------------------------------------------------------------
+# Stage 2: Install Python & ADK dependencies
+# ---------------------------------------------------------------------------
+FROM base AS python-deps
+RUN apk add --no-cache python3 py3-pip
+WORKDIR /app/agent
+
+COPY agent/requirements.txt ./
+RUN python3 -m pip install --break-system-packages --no-cache-dir -r requirements.txt
+
+# ---------------------------------------------------------------------------
+# Stage 3: Build the Next.js application
+# ---------------------------------------------------------------------------
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the build.
-# ENV NEXT_TELEMETRY_DISABLED 1
-
 RUN npm run build
 
-# Production image, copy all the files and run next
+# ---------------------------------------------------------------------------
+# Stage 4: Production image (Next.js + Python ADK server)
+# ---------------------------------------------------------------------------
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
-# Uncomment the following line in case you want to disable telemetry during runtime.
-# ENV NEXT_TELEMETRY_DISABLED 1
+# Install Python runtime and pip packages
+RUN apk add --no-cache python3 py3-pip
+COPY agent/ ./agent/
+RUN python3 -m pip install --break-system-packages --no-cache-dir -r agent/requirements.txt
+
+ENV NODE_ENV=production
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/public ./public
 
-# Set the correct permission for prerender cache
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
+# Copy Next.js standalone output
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# Copy the startup script
+COPY --chown=nextjs:nodejs start.sh ./
+RUN chmod +x start.sh
+
 USER nextjs
 
-EXPOSE 3000
+EXPOSE 3000 8000
 
-ENV PORT 3000
+ENV PORT=3000
+ENV ADK_BACKEND_URL=http://localhost:8000
 
-# server.js is created by next build from the standalone output
-# https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD HOSTNAME="0.0.0.0" node server.js
+# Start both the ADK Python server and the Next.js server
+CMD ["sh", "start.sh"]
